@@ -8,10 +8,18 @@
 
 <body>
     <p>
-        One moment, creating PDF...
+        <a href="javascript:void(0)" id="generate-link">Generate PDF</a>
+        <span id="generate-msg" style="display: none">Generating PDF...</span>
+        <a href="#" id="download-link" download="sample.pdf" style="display: none">Download PDF</a>
     </p>
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
+        let generateLink = document.getElementById("generate-link");
+        let generateMsg = document.getElementById("generate-msg");
+        let downloadLink = document.getElementById("download-link");
+        generateLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            generateLink.style.display = 'none';
+            generateMsg.style.display = 'block';
             fetch("./simple-example.json")
                 .then(response => {
                     return response.json();
@@ -32,7 +40,9 @@
             pdfFileBlobURL = URL.createObjectURL(blob);
             // for debugging purposes, open another window
             //window.open(pdfFileBlobURL, "_blank");
-            window.location.href = pdfFileBlobURL;
+            downloadLink.href = pdfFileBlobURL;
+            generateMsg.style.display = 'none';
+            downloadLink.style.display = 'block';
         }
 
         let jsonOut = (data) => {
