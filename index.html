@@ -8,23 +8,23 @@
 
 <body>
     <p>
-        <a href="javascript:void(0)" id="generate-link">Generate PDF</a>
-        <span id="generate-msg" style="display: none">Generating PDF...</span>
+        <span id="generate-msg" style="display: none">One moment. Generating PDF...</span>
         <a href="#" id="download-link" download="sample.pdf" style="display: none">Download PDF</a>
     </p>
     <script>
-        let generateLink = document.getElementById("generate-link");
         let generateMsg = document.getElementById("generate-msg");
         let downloadLink = document.getElementById("download-link");
-        generateLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            generateLink.style.display = 'none';
+        window.addEventListener('DOMContentLoaded', () => {
             generateMsg.style.display = 'block';
             fetch("./simple-example.json")
                 .then(response => {
                     return response.json();
                 })
                 .then(doc => {
+                    // Change the title to show date (now)
+                    let date = new Date().toLocaleString();
+                    let title = doc.contents[0].params;
+                    title.text += " (created: " + date + ")";
                     createPDF(doc);
                 });
         });
@@ -38,8 +38,6 @@
                 URL.revokeObjectURL(pdfFileBlobURL);
             }
             pdfFileBlobURL = URL.createObjectURL(blob);
-            // for debugging purposes, open another window
-            //window.open(pdfFileBlobURL, "_blank");
             downloadLink.href = pdfFileBlobURL;
             generateMsg.style.display = 'none';
             downloadLink.style.display = 'block';
