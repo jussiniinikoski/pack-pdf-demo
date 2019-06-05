@@ -8,14 +8,10 @@
 
 <body>
     <p>
-        <span id="generate-msg" style="display: none">One moment. Generating PDF...</span>
-        <a href="#" id="download-link" download="sample.pdf" style="display: none">Download PDF</a>
+        One moment, creating PDF...
     </p>
     <script>
-        let generateMsg = document.getElementById("generate-msg");
-        let downloadLink = document.getElementById("download-link");
         window.addEventListener('DOMContentLoaded', () => {
-            generateMsg.style.display = 'block';
             fetch("./simple-example.json")
                 .then(response => {
                     return response.json();
@@ -38,9 +34,9 @@
                 URL.revokeObjectURL(pdfFileBlobURL);
             }
             pdfFileBlobURL = URL.createObjectURL(blob);
-            downloadLink.href = pdfFileBlobURL;
-            generateMsg.style.display = 'none';
-            downloadLink.style.display = 'block';
+            // for debugging purposes, open another window
+            //window.open(pdfFileBlobURL, "_blank");
+            window.location.href = pdfFileBlobURL;
         }
 
         let jsonOut = (data) => {
