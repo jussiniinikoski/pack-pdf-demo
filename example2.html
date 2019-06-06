@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>WASM-PDF</title>
+</head>
+
+<body>
+    <p>
+        <span id="message">One moment, creating PDF...</span>
+        <a href="javascript:void(0)" download="sample.pdf" style="display: none" id="download-link">Download PDF</a>
+    </p>
+    <script>
+        let lorem = {
+            obj_type: "Paragraph",
+            params: {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam maximus tincidunt nisl. Integer bibendum, leo sed lobortis mollis, orci ante vulputate velit, id ultricies diam mauris consequat neque. Integer et nibh lectus. Cras felis massa, vehicula eget consequat sit amet, bibendum et est. Morbi ultrices id metus quis mollis. Suspendisse condimentum tristique est, sit amet tempor nulla semper sit amet. Aliquam luctus lacinia porta. In et tellus tincidunt, faucibus nisi in, vestibulum urna. Vestibulum eu neque massa. Morbi id tellus euismod, congue diam non, varius ligula. Etiam vel diam gravida eros molestie iaculis dictum ac ligula. Sed rutrum sagittis massa eu feugiat. Etiam blandit iaculis bibendum.",
+                font_name: "Helvetica",
+                font_size: 12
+            }
+        };
+        let example2 = {
+            obj_type: "Paragraph",
+            params: {
+                text: "And after this paragraph, comes a 400 paragraphs of dynamically generated Lorem Ipsum...",
+                font_size: 14,
+                align: "center",
+                font_name: "Helvetica-Bold",
+                color: [0, 0, 1],
+                padding: {
+                    bottom: 24
+                }
+            }
+        };
+        window.addEventListener('DOMContentLoaded', () => {
+            fetch("./simple-example.json")
+                .then(response => {
+                    return response.json();
+                })
+                .then(doc => {
+                    // Change the title to show date (now)
+                    let date = new Date().toLocaleString();
+                    let title = doc.contents[0].params;
+                    title.text += " (created: " + date + ")";
+                    doc.contents.push(example2);
+                    for (let x=0; x<400; x++) {
+                        doc.contents.push(lorem);
+                    }
+                    createPDF(doc);
+                });
+        });
+
+        let pdfFileBlobURL = null;
+        let generatePDF = (data) => {
+            const blob = new Blob([data], {
+                type: 'application/pdf'
+            });
+            if (pdfFileBlobURL !== null) {
+                URL.revokeObjectURL(pdfFileBlobURL);
+            }
+            pdfFileBlobURL = URL.createObjectURL(blob);
+            let downloadLink = document.getElementById("download-link");
+            downloadLink.href = pdfFileBlobURL;
+            downloadLink.style.display = 'block';
+            let message = document.getElementById("message");
+            message.style.display = 'none';
+        }
+
+        let jsonOut = (data) => {
+            console.log(JSON.stringify(data));
+        };
+    </script>
+<script type="text/javascript" src="index.js"></script></body>
+</html>
