@@ -9,7 +9,7 @@
 <body>
     <p>
         <span id="message">One moment, creating PDF...</span>
-        <a href="javascript:void(0)" download="sample.pdf" style="display: none" id="download-link">Download PDF</a>
+        <a href="javascript:void(0)" download="lorem-ipsum.pdf" style="display: none" id="download-link">Download PDF</a>
     </p>
     <script>
         let lorem = {
@@ -23,8 +23,8 @@
         let example2 = {
             obj_type: "Paragraph",
             params: {
-                text: "And after this paragraph, comes a 400 paragraphs of dynamically generated Lorem Ipsum...",
-                font_size: 14,
+                text: "Hello Lorem Ipsum",
+                font_size: 16,
                 align: "center",
                 font_name: "Helvetica-Bold",
                 color: [0, 0, 1],
@@ -33,22 +33,25 @@
                 }
             }
         };
+        let doc = {
+            title: "Example Document",
+            template: {
+                top: 50,
+                left: 50,
+                right: 50,
+                bottom: 50
+            },
+            contents: []
+        };
         window.addEventListener('DOMContentLoaded', () => {
-            fetch("./simple-example.json")
-                .then(response => {
-                    return response.json();
-                })
-                .then(doc => {
-                    // Change the title to show date (now)
-                    let date = new Date().toLocaleString();
-                    let title = doc.contents[0].params;
-                    title.text += " (created: " + date + ")";
-                    doc.contents.push(example2);
-                    for (let x=0; x<400; x++) {
-                        doc.contents.push(lorem);
-                    }
-                    createPDF(doc);
-                });
+            // Change the title to show date (now)
+            let date = new Date().toLocaleString();
+            example2.params.text += " - created: " + date;
+            doc.contents.push(example2);
+            for (let x=0; x<400; x++) {
+                doc.contents.push(lorem);
+            }
+            createPDF(doc);
         });
 
         let pdfFileBlobURL = null;
