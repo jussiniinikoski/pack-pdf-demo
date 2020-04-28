@@ -1,18 +1,5 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <title>WASM-PDF</title>
-</head>
-
-<body>
-    <p>
-        One moment, creating PDF...
-    </p>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            fetch("./simple-example.json")
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>WASM-PDF</title></head><body><p>One moment, creating PDF...</p><script>window.addEventListener('DOMContentLoaded', () => {
+            fetch("./text-example.json")
                 .then(response => {
                     return response.json();
                 })
@@ -41,7 +28,4 @@
 
         let jsonOut = (data) => {
             console.log(JSON.stringify(data));
-        };
-    </script>
-<script type="text/javascript" src="index.js"></script></body>
-</html>
+        };</script><script src="index.js"></script></body></html>
